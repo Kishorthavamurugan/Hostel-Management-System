@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Edit Room - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 bg-light min-vh-100">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 class="h2 mb-2">
+                    <i class="fas fa-edit text-primary me-2"></i>Edit Room {{ room.room_number }}
+                </h1>
+                <p class="text-muted">Update room details</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <form method="post" class="needs-validation">
+                            {% csrf_token %}
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.room_number.id_for_label }}" class="form-label">
+                                        <strong>Room Number</strong>
+                                    </label>
+                                    {{ form.room_number }}
+                                    {% if form.room_number.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.room_number.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.block_name.id_for_label }}" class="form-label">
+                                        <strong>Block Name</strong>
+                                    </label>
+                                    {{ form.block_name }}
+                                    {% if form.block_name.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.block_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.floor.id_for_label }}" class="form-label">
+                                        <strong>Floor</strong>
+                                    </label>
+                                    {{ form.floor }}
+                                    {% if form.floor.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.floor.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.capacity.id_for_label }}" class="form-label">
+                                        <strong>Capacity</strong>
+                                    </label>
+                                    {{ form.capacity }}
+                                    {% if form.capacity.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.capacity.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.room_type.id_for_label }}" class="form-label">
+                                        <strong>Room Type</strong>
+                                    </label>
+                                    {{ form.room_type }}
+                                    {% if form.room_type.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.room_type.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.status.id_for_label }}" class="form-label">
+                                        <strong>Status</strong>
+                                    </label>
+                                    {{ form.status }}
+                                    {% if form.status.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.status.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.amenities.id_for_label }}" class="form-label">
+                                    <strong>Amenities</strong>
+                                    <small class="text-muted">(comma-separated)</small>
+                                </label>
+                                {{ form.amenities }}
+                                {% if form.amenities.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.amenities.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="alert alert-info">
+                                <strong>Current Status:</strong> {{ room.current_occupancy }}/{{ room.capacity }} occupancy
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                                <a href="{% url 'manage_rooms' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

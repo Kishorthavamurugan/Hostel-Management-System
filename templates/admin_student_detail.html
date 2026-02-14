@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block title %}Student Detail - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 bg-light min-vh-100">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <a href="{% url 'manage_students' %}" class="btn btn-outline-secondary mb-3">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Students
+                </a>
+                <h1 class="h2 mb-2">
+                    <i class="fas fa-user text-primary me-2"></i>{{ student.full_name }}
+                </h1>
+                <p class="text-muted">{{ student.user.username }}</p>
+            </div>
+        </div>
+
+        <!-- Student Info Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">
+                            <strong>Full Name:</strong><br>
+                            {{ student.full_name }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Department:</strong><br>
+                            {{ student.get_department_display }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Year:</strong><br>
+                            Year {{ student.year }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Phone Number:</strong><br>
+                            {{ student.phone_number }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Address:</strong><br>
+                            {{ student.address }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Guardian Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">
+                            <strong>Guardian Name:</strong><br>
+                            {{ student.guardian_name }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Guardian Phone:</strong><br>
+                            {{ student.guardian_phone|default:"Not provided" }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Registered Date:</strong><br>
+                            {{ student.created_at|date:"d M Y H:i" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Allocations -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Room Allocations</h5>
+                    </div>
+                    {% if allocations %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Applied</th>
+                                    <th>Allocated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alloc in allocations %}
+                                <tr>
+                                    <td>
+                                        <strong>Room {{ alloc.room.room_number }}</strong><br>
+                                        <small class="text-muted">Block {{ alloc.room.block_name }}, Floor {{ alloc.room.floor }}</small>
+                                    </td>
+                                    <td>
+                                        {% if alloc.status == 'Approved' %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% elif alloc.status == 'Rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ alloc.applied_date|date:"d M Y" }}</td>
+                                    <td>{{ alloc.allocated_date|date:"d M Y"|default:"-" }}</td>
+                                    <td>
+                                        {% if alloc.status == 'Approved' %}
+                                        <form method="post" action="{% url 'remove_allocation' alloc.id %}" style="display: inline-block;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove allocation?');">
+                                                <i class="fas fa-trash me-1"></i>Remove
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="card-body text-center py-3 text-muted">
+                        <i class="fas fa-inbox me-2"></i>No room allocations
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaints -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Complaints ({{ complaints.count }})</h5>
+                    </div>
+                    {% if complaints %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ complaint.subject }}</strong>
+                                    </td>
+                                    <td>
+                                        {% if complaint.priority == 'High' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif complaint.priority == 'Medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-info">Low</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if complaint.status == 'Resolved' %}
+                                            <span class="badge bg-success">Resolved</span>
+                                        {% elif complaint.status == 'In Progress' %}
+                                            <span class="badge bg-warning">In Progress</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ complaint.created_at|date:"d M Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="card-body text-center py-3 text-muted">
+                        <i class="fas fa-inbox me-2"></i>No complaints
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

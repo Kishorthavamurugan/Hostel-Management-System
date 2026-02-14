@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 bg-light min-vh-100">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="h2 mb-2">
+                    <i class="fas fa-home text-primary me-2"></i>Welcome, {{ student_profile.full_name }}!
+                </h1>
+                <p class="text-muted">{{ student_profile.get_department_display }} - Year {{ student_profile.year }}</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-calendar-alt me-2"></i>{{ today|date:"d M Y" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            {% if allocated_room %}
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-0 fw-bold">Allocated Room</p>
+                                    <h3 class="mb-0">{{ allocated_room.room_number }}</h3>
+                                    <small>Block {{ allocated_room.block_name }}, Floor {{ allocated_room.floor }}</small>
+                                </div>
+                                <i class="fas fa-door-open fa-3x opacity-25"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-3 mb-3">
+                    <div class="card border-0 shadow-sm bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-0 fw-bold">Room Status</p>
+                                    <h3 class="mb-0">Not Allocated</h3>
+                                    <small>Apply for a room</small>
+                                </div>
+                                <i class="fas fa-user-clock fa-3x opacity-25"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Pending Applications</p>
+                                <h3 class="mb-0">{{ pending_applications }}</h3>
+                                <small>Awaiting approval</small>
+                            </div>
+                            <i class="fas fa-hourglass-half fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Available Rooms</p>
+                                <h3 class="mb-0">{{ available_rooms_count }}</h3>
+                                <small>Ready to apply</small>
+                            </div>
+                            <i class="fas fa-home fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Complaints</p>
+                                <h3 class="mb-0">{{ complaints.count }}</h3>
+                                <small>Submitted</small>
+                            </div>
+                            <i class="fas fa-exclamation-circle fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-lightning-bolt text-warning me-2"></i>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'room_list' %}" class="btn btn-outline-primary me-2 mb-2">
+                            <i class="fas fa-door-open me-2"></i>Browse Rooms
+                        </a>
+                        <a href="{% url 'my_applications' %}" class="btn btn-outline-info me-2 mb-2">
+                            <i class="fas fa-file-alt me-2"></i>My Applications
+                        </a>
+                        <a href="{% url 'complaints' %}" class="btn btn-outline-danger me-2 mb-2">
+                            <i class="fas fa-comments me-2"></i>Submit Complaint
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Complaints -->
+        {% if complaints %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Recent Complaints</h5>
+                            <a href="{% url 'complaints' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                        <th>Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for complaint in complaints %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ complaint.subject|truncatewords:5 }}</strong>
+                                        </td>
+                                        <td>
+                                            {% if complaint.status == 'Resolved' %}
+                                                <span class="badge bg-success">{{ complaint.status }}</span>
+                                            {% elif complaint.status == 'In Progress' %}
+                                                <span class="badge bg-warning">{{ complaint.status }}</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">{{ complaint.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if complaint.priority == 'High' %}
+                                                <span class="badge bg-danger">{{ complaint.priority }}</span>
+                                            {% elif complaint.priority == 'Medium' %}
+                                                <span class="badge bg-warning">{{ complaint.priority }}</span>
+                                            {% else %}
+                                                <span class="badge bg-info">{{ complaint.priority }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td><small class="text-muted">{{ complaint.created_at|date:"d M Y" }}</small></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

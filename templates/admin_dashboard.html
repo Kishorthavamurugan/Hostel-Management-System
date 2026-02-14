@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 bg-light min-vh-100">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 class="h2 mb-2">
+                    <i class="fas fa-tachometer-alt text-primary me-2"></i>Admin Dashboard
+                </h1>
+                <p class="text-muted">Monitor hostel operations and manage resources</p>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Total Students</p>
+                                <h3 class="mb-0">{{ total_students }}</h3>
+                            </div>
+                            <i class="fas fa-users fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Total Rooms</p>
+                                <h3 class="mb-0">{{ total_rooms }}</h3>
+                            </div>
+                            <i class="fas fa-door-open fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Available Rooms</p>
+                                <h3 class="mb-0">{{ available_rooms }}</h3>
+                            </div>
+                            <i class="fas fa-check-circle fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Occupied Rooms</p>
+                                <h3 class="mb-0">{{ occupied_rooms }}</h3>
+                            </div>
+                            <i class="fas fa-home fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Stats -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Maintenance Rooms</p>
+                                <h3 class="mb-0">{{ maintenance_rooms }}</h3>
+                            </div>
+                            <i class="fas fa-wrench fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm bg-secondary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Pending Applications</p>
+                                <h3 class="mb-0">{{ pending_applications }}</h3>
+                            </div>
+                            <i class="fas fa-hourglass-half fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0 fw-bold">Pending Complaints</p>
+                                <h3 class="mb-0">{{ pending_complaints }}</h3>
+                            </div>
+                            <i class="fas fa-exclamation-circle fa-3x opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0"><i class="fas fa-lightning-bolt text-warning me-2"></i>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'add_room' %}" class="btn btn-outline-primary me-2 mb-2">
+                            <i class="fas fa-plus me-2"></i>Add Room
+                        </a>
+                        <a href="{% url 'manage_applications' %}" class="btn btn-outline-info me-2 mb-2">
+                            <i class="fas fa-file-alt me-2"></i>Review Applications
+                        </a>
+                        <a href="{% url 'manage_students' %}" class="btn btn-outline-success me-2 mb-2">
+                            <i class="fas fa-users me-2"></i>Student Management
+                        </a>
+                        <a href="{% url 'manage_complaints' %}" class="btn btn-outline-danger me-2 mb-2">
+                            <i class="fas fa-comments me-2"></i>Review Complaints
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Applications -->
+        {% if recent_applications %}
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Applications</h5>
+                            <a href="{% url 'manage_applications' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Room</th>
+                                    <th>Applied</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in recent_applications %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ app.student.student_profile.full_name }}</strong><br>
+                                        <small class="text-muted">{{ app.student.username }}</small>
+                                    </td>
+                                    <td>
+                                        Room {{ app.room.room_number }} - Block {{ app.room.block_name }}
+                                    </td>
+                                    <td>
+                                        {{ app.applied_date|date:"d M Y H:i" }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'manage_applications' %}" class="btn btn-sm btn-primary">Review</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Recent Complaints -->
+        {% if recent_complaints %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Pending Complaints</h5>
+                            <a href="{% url 'manage_complaints' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Student</th>
+                                    <th>Priority</th>
+                                    <th>Submitted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in recent_complaints %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ complaint.subject }}</strong>
+                                    </td>
+                                    <td>
+                                        {{ complaint.student.student_profile.full_name }}
+                                    </td>
+                                    <td>
+                                        {% if complaint.priority == 'High' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif complaint.priority == 'Medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-info">Low</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ complaint.created_at|date:"d M Y" }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
