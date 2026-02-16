@@ -22,25 +22,27 @@ urlpatterns = [
     path('complaints/', views.complaints, name='complaints'),
     
     # Admin Views
-    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
     # Room Management
-    path('admin/rooms/', views.manage_rooms, name='manage_rooms'),
-    path('admin/rooms/add/', views.add_room, name='add_room'),
-    path('admin/rooms/<int:room_id>/edit/', views.edit_room, name='edit_room'),
-    path('admin/rooms/<int:room_id>/delete/', views.delete_room, name='delete_room'),
+    path('manage-rooms/', views.manage_rooms, name='manage_rooms'),
+    path('manage-rooms/add/', views.add_room, name='add_room'),
+    path('manage-rooms/<int:room_id>/edit/', views.edit_room, name='edit_room'),
+    path('manage-rooms/<int:room_id>/delete/', views.delete_room, name='delete_room'),
+    
     
     # Application Management
-    path('admin/applications/', views.manage_applications, name='manage_applications'),
-    path('admin/applications/<int:allocation_id>/approve/', views.approve_application, name='approve_application'),
-    path('admin/applications/<int:allocation_id>/reject/', views.reject_application, name='reject_application'),
-    path('admin/allocations/<int:allocation_id>/remove/', views.remove_allocation, name='remove_allocation'),
+    path('manage-applications/', views.manage_applications, name='manage_applications'),
+    path('manage-applications/<int:allocation_id>/approve/', views.approve_application, name='approve_application'),
+    path('manage-applications/<int:allocation_id>/reject/', views.reject_application, name='reject_application'),
+    path('manage-allocations/<int:allocation_id>/remove/', views.remove_allocation, name='remove_allocation'),
     
     # Student Management
-    path('admin/students/', views.manage_students, name='manage_students'),
-    path('admin/students/<int:student_id>/', views.student_detail, name='student_detail'),
+    path('manage-students/', views.manage_students, name='manage_students'),
+    path('manage-students/<int:student_id>/', views.student_detail, name='student_detail'),
     
     # Complaint Management
-    path('admin/complaints/', views.manage_complaints, name='manage_complaints'),
-    path('admin/complaints/<int:complaint_id>/', views.complaint_detail, name='complaint_detail'),
+    path('manage-complaints/', views.manage_complaints, name='manage_complaints'),
+    path('manage-complaints/<int:complaint_id>/', views.complaint_detail, name='complaint_detail'),
+    
 ]
