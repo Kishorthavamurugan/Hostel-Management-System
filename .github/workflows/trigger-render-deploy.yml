@@ -3,7 +3,7 @@ name: Trigger Render Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   trigger-render-deploy:
