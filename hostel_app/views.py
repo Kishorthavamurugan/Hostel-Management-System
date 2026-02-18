@@ -496,7 +496,7 @@ def manage_students(request):
             Q(phone_number__icontains=search_query)
         )
     
-    students = students.order_by('-created_at')
+    students = students.order_by('full_name')
     
     # Pagination
     paginator = Paginator(students, 20)

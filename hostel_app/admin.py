@@ -9,6 +9,7 @@ from .models import StudentProfile, Room, RoomAllocation, Complaint
 @admin.register(StudentProfile)
 class StudentProfileAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'user', 'department', 'year', 'phone_number', 'created_at')
+    ordering = ('full_name',)
     list_filter = ('department', 'year', 'created_at')
     search_fields = ('full_name', 'user__username', 'phone_number')
     readonly_fields = ('created_at', 'updated_at')

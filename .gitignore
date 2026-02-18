@@ -58,3 +58,5 @@ migrations/
 .pytest_cache/
 htmlcov/
 .coverage
+
+db_local.sqlite3
